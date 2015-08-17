@@ -26,8 +26,11 @@
 #endif
 
 #include <glib/gi18n-lib.h>
-
 #include <gtk/gtk.h>
+
+#ifdef G_OS_WIN32
+	#include <windows.h>
+#endif
 
 #if defined (REPTOOL_FOUND) || defined (SOLIPA_FOUND)
 	#include <gdk/gdk.h>
