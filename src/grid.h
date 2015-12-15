@@ -84,9 +84,15 @@ gboolean gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
                                                            GdaDataModel *dm,
                                                            GdaExGridFillListStoreMissingFunc missing_func, gpointer user_data,
                                                            GError **error);
+gboolean gdaex_grid_fill_from_sqlbuilder_with_missing_func (GdaExGrid *grid,
+                                                            GdaEx *gdaex,
+                                                            GdaExSqlBuilder *sqlbuilder,
+                                                            GdaExGridFillListStoreMissingFunc missing_func, gpointer user_data,
+                                                            GError **error);
 
 gboolean gdaex_grid_fill_from_sql (GdaExGrid *grid, GdaEx *gdaex, const gchar *sql, GError **error);
 gboolean gdaex_grid_fill_from_datamodel (GdaExGrid *grid, GdaDataModel *dm, GError **error);
+gboolean gdaex_grid_fill_from_sqlbuilder (GdaExGrid *grid, GdaEx *gdaex, GdaExSqlBuilder *builder, GError **error);
 
 #ifdef SOLIPA_FOUND
 void gdaex_grid_set_solipa (GdaExGrid *grid, Solipa *solipa);

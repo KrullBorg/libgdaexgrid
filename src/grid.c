@@ -517,6 +517,28 @@ gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
 }
 
 gboolean
+gdaex_grid_fill_from_sqlbuilder_with_missing_func (GdaExGrid *grid,
+                                                   GdaEx *gdaex,
+                                                   GdaExSqlBuilder *builder,
+                                                   GdaExGridFillListStoreMissingFunc missing_func, gpointer user_data,
+                                                   GError **error)
+{
+	GdaDataModel *dm;
+
+	gboolean ret;
+
+	g_return_val_if_fail (GDAEX_IS_GRID (grid), FALSE);
+	g_return_val_if_fail (IS_GDAEX (gdaex), FALSE);
+	g_return_val_if_fail (GDAEX_IS_SQLBUILDER (builder), FALSE);
+
+	dm = gdaex_sql_builder_query (builder, gdaex, NULL);
+	ret = gdaex_grid_fill_from_datamodel_with_missing_func (grid, dm, missing_func, user_data, error);
+	g_object_unref (dm);
+
+	return ret;
+}
+
+gboolean
 gdaex_grid_fill_from_sql (GdaExGrid *grid, GdaEx *gdaex, const gchar *sql, GError **error)
 {
 	return gdaex_grid_fill_from_sql_with_missing_func (grid, gdaex, sql, NULL, NULL, error);
@@ -526,6 +548,12 @@ gboolean
 gdaex_grid_fill_from_datamodel (GdaExGrid *grid, GdaDataModel *dm, GError **error)
 {
 	return gdaex_grid_fill_from_datamodel_with_missing_func (grid, dm, NULL, NULL, error);
+}
+
+gboolean
+gdaex_grid_fill_from_sqlbuilder (GdaExGrid *grid, GdaEx *gdaex, GdaExSqlBuilder *builder, GError **error)
+{
+	return gdaex_grid_fill_from_sqlbuilder_with_missing_func (grid, gdaex, builder, NULL, NULL, error);
 }
 
 #ifdef SOLIPA_FOUND
