@@ -14,7 +14,9 @@ LIBS += \
         $(SOLIPA_LIBS)
 endif
 
-noinst_PROGRAMS = grid
+noinst_PROGRAMS = \
+                  grid \
+                  grid_tree
 
 LDADD = $(top_builddir)/src/libgdaexgrid.la
 
