@@ -1,7 +1,7 @@
 /*
  *  grid.c
  *
- *  Copyright (C) 2010-2015 Andrea Zagli <azagli@libero.it>
+ *  Copyright (C) 2010-2016 Andrea Zagli <azagli@libero.it>
  *
  *  This file is part of libgdaexgrid.
  *
@@ -364,7 +364,7 @@ gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
 	dm_iter = gda_data_model_create_iter (dm);
 	g_return_val_if_fail (GDA_IS_DATA_MODEL_ITER (dm_iter), FALSE);
 
-	gtk_list_store_clear (GTK_LIST_STORE (priv->model));
+	gtk_tree_store_clear (GTK_TREE_STORE (priv->model));
 
 	cols = gtk_tree_model_get_n_columns (priv->model);
 	columns = g_new0 (gint, cols);
@@ -374,7 +374,7 @@ gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
 
 	while (gda_data_model_iter_move_next (dm_iter))
 		{
-			gtk_list_store_append (GTK_LIST_STORE (priv->model), &iter);
+			gtk_tree_store_append (GTK_TREE_STORE (priv->model), &iter, NULL);
 
 			cols_sorted = priv->columns->len;
 			for (col = 0; col < priv->columns->len; col++)
@@ -505,11 +505,11 @@ gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
 						}
 				}
 
-			gtk_list_store_set_valuesv (GTK_LIST_STORE (priv->model), &iter, columns, values, cols);
+			gtk_tree_store_set_valuesv (GTK_TREE_STORE (priv->model), &iter, columns, values, cols);
 			if (call_missing_func
 			    && missing_func != NULL)
 				{
-					missing_func (GTK_LIST_STORE (priv->model), &iter, user_data);
+					missing_func (GTK_TREE_STORE (priv->model), &iter, user_data);
 				}
 		}
 
@@ -661,7 +661,7 @@ static GtkTreeModel
 		{
 			g_object_unref (priv->model);
 		}
-	priv->model = GTK_TREE_MODEL (gtk_list_store_newv (cols, gtype));
+	priv->model = GTK_TREE_MODEL (gtk_tree_store_newv (cols, gtype));
 
 	return priv->model;
 }

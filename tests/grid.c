@@ -24,9 +24,9 @@
 GdaExGridColumn *gcol_birthday;
 
 static void
-missing_func (GtkListStore *lstore, GtkTreeIter *iter, gpointer user_data)
+missing_func (GtkTreeStore *tstore, GtkTreeIter *iter, gpointer user_data)
 {
-	gtk_list_store_set (lstore, iter,
+	gtk_tree_store_set (tstore, iter,
 	                    7, "missing",
 	                    -1);
 }
