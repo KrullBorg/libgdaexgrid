@@ -400,7 +400,7 @@ gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
 							switch (col_gtype)
 								{
 									case G_TYPE_STRING:
-										gda_col = gda_data_model_describe_column (dm, col);
+										gda_col = gda_data_model_describe_column (dm, gda_data_model_get_column_index (dm, field_name));
 										gda_col_gtype = gda_column_get_g_type (gda_col);
 
 										switch (gda_col_gtype)
@@ -602,7 +602,7 @@ gdaex_grid_get_property (GObject *object, guint property_id, GValue *value, GPar
 static GtkTreeModel
 *gdaex_grid_get_model (GdaExGrid *grid)
 {
-	/* TODO for now it returns always a GtkListStore */
+	/* TODO for now it returns always a GtkTreeStore */
 	GdaExGridPrivate *priv;
 
 	guint cols;

@@ -93,6 +93,9 @@ main (int argc, char **argv)
 	gcol = gdaex_grid_column_new_defaults ("Age", "age", G_TYPE_INT);
 	gdaex_grid_add_column (grid, gcol);
 
+	gcol = gdaex_grid_column_new_defaults ("Missing", "missing", G_TYPE_STRING);
+	gdaex_grid_add_column (grid, gcol);
+
 	gcol_birthday = gdaex_grid_column_new ("Birthday", "birthday", G_TYPE_DATE, FALSE, TRUE, TRUE, TRUE, -1);
 	gdaex_grid_add_column (grid, gcol_birthday);
 
@@ -102,13 +105,10 @@ main (int argc, char **argv)
 	gcol = gdaex_grid_column_new ("Married", "married", G_TYPE_BOOLEAN, TRUE, TRUE, TRUE, TRUE, -1);
 	gdaex_grid_add_column (grid, gcol);
 
-	gcol = gdaex_grid_column_new_defaults ("Missing", "missing", G_TYPE_STRING);
-	gdaex_grid_add_column (grid, gcol);
-
 	wgrid = gdaex_grid_get_widget (grid);
 	gtk_container_add (GTK_CONTAINER (scrolledw), wgrid);
 
-	gdaex_grid_fill_from_sql_with_missing_func (grid, gdaex, "SELECT * FROM clients", missing_func, NULL, NULL);
+	gdaex_grid_fill_from_sql_with_missing_func (grid, gdaex, "SELECT name, surname, id, birthday, married, incoming, age FROM clients", missing_func, NULL, NULL);
 
 	hbtnbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
 	gtk_box_pack_start (GTK_BOX (vbox), hbtnbox, FALSE, FALSE, 0);
