@@ -97,6 +97,8 @@ struct _GdaExGridPrivate
 #ifdef SOLIPA_FOUND
 		Solipa *solipa;
 #endif
+
+		gchar *app_textdomain;
 	};
 
 G_DEFINE_TYPE (GdaExGrid, gdaex_grid, G_TYPE_OBJECT)
@@ -140,6 +142,8 @@ gdaex_grid_init (GdaExGrid *gdaex_grid)
 	priv->title = NULL;
 	priv->view = NULL;
 	priv->menu = NULL;
+
+	priv->app_textdomain = NULL;
 }
 
 GdaExGrid
@@ -185,6 +189,22 @@ GdaExGrid
 	g_free (localedir);
 
 	return gdaex_grid;
+}
+
+void
+gdaex_grid_set_app_textdomain (GdaExGrid *grid, const gchar *textdomain)
+{
+	GdaExGridPrivate *priv;
+
+	g_return_if_fail (GDAEX_IS_GRID (grid));
+
+	priv = GDAEX_GRID_GET_PRIVATE (grid);
+
+	if (priv->app_textdomain != NULL)
+		{
+			g_free (priv->app_textdomain);
+		}
+	priv->app_textdomain = g_strdup (textdomain);
 }
 
 void
@@ -372,6 +392,11 @@ gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
 
 	call_missing_func = FALSE;
 
+	if (priv->app_textdomain != NULL)
+		{
+			textdomain (priv->app_textdomain);
+		}
+
 	while (gda_data_model_iter_move_next (dm_iter))
 		{
 			gtk_tree_store_append (GTK_TREE_STORE (priv->model), &iter, NULL);
@@ -406,7 +431,7 @@ gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
 										switch (gda_col_gtype)
 											{
 												case G_TYPE_STRING:
-													g_value_set_string (&gval, gdaex_data_model_iter_get_field_value_stringify_at (dm_iter, field_name));
+													g_value_set_string (&gval, gettext (gdaex_data_model_iter_get_field_value_stringify_at (dm_iter, field_name)));
 													break;
 
 												case G_TYPE_BOOLEAN:
@@ -432,7 +457,7 @@ gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
 														}
 													else
 														{
-															g_value_set_string (&gval, gdaex_data_model_iter_get_field_value_stringify_at (dm_iter, field_name));
+															g_value_set_string (&gval, gettext (gdaex_data_model_iter_get_field_value_stringify_at (dm_iter, field_name)));
 														}
 													break;
 											}
@@ -456,7 +481,7 @@ gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
 										break;
 
 									default:
-										gval = *gda_value_new_from_string (gdaex_data_model_iter_get_field_value_stringify_at (dm_iter, field_name), col_gtype);
+										gval = *gda_value_new_from_string (gettext (gdaex_data_model_iter_get_field_value_stringify_at (dm_iter, field_name)), col_gtype);
 										break;
 								}
 						}
@@ -511,6 +536,11 @@ gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
 				{
 					missing_func (GTK_TREE_STORE (priv->model), &iter, user_data);
 				}
+		}
+
+	if (priv->app_textdomain != NULL)
+		{
+			textdomain (GETTEXT_PACKAGE);
 		}
 
 	return TRUE;
