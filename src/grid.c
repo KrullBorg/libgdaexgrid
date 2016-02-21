@@ -338,17 +338,19 @@ gdaex_grid_fill_from_sql_with_missing_func (GdaExGrid *grid,
 }
 
 static
-gchar *_gettext (const gchar *str)
+const gchar *_gettext (const gchar *str)
 {
 	gchar *ret;
 
-	ret = g_strstrip (g_strdup (str));
-	if (g_strcmp0 (ret, "") == 0)
+	ret = g_strdup (str);
+	if (g_strcmp0 (g_strstrip (ret), "") == 0)
 		{
-			return ret;
+			g_free (ret);
+			return "";
 		}
 	else
 		{
+			g_free (ret);
 			return gettext (str);
 		}
 }
