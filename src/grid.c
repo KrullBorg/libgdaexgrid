@@ -337,6 +337,22 @@ gdaex_grid_fill_from_sql_with_missing_func (GdaExGrid *grid,
 	return ret;
 }
 
+static
+gchar *_gettext (const gchar *str)
+{
+	gchar *ret;
+
+	ret = g_strstrip (g_strdup (str));
+	if (g_strcmp0 (ret, "") == 0)
+		{
+			return ret;
+		}
+	else
+		{
+			return gettext (str);
+		}
+}
+
 gboolean
 gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
                                                   GdaDataModel *dm,
@@ -431,7 +447,7 @@ gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
 										switch (gda_col_gtype)
 											{
 												case G_TYPE_STRING:
-													g_value_set_string (&gval, gettext (gdaex_data_model_iter_get_field_value_stringify_at (dm_iter, field_name)));
+													g_value_set_string (&gval, _gettext (gdaex_data_model_iter_get_field_value_stringify_at (dm_iter, field_name)));
 													break;
 
 												case G_TYPE_BOOLEAN:
@@ -457,7 +473,7 @@ gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
 														}
 													else
 														{
-															g_value_set_string (&gval, gettext (gdaex_data_model_iter_get_field_value_stringify_at (dm_iter, field_name)));
+															g_value_set_string (&gval, _gettext (gdaex_data_model_iter_get_field_value_stringify_at (dm_iter, field_name)));
 														}
 													break;
 											}
@@ -481,7 +497,7 @@ gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
 										break;
 
 									default:
-										gval = *gda_value_new_from_string (gettext (gdaex_data_model_iter_get_field_value_stringify_at (dm_iter, field_name)), col_gtype);
+										gval = *gda_value_new_from_string (_gettext (gdaex_data_model_iter_get_field_value_stringify_at (dm_iter, field_name)), col_gtype);
 										break;
 								}
 						}
