@@ -77,6 +77,24 @@ GtkWidget *gdaex_grid_get_widget (GdaExGrid *grid);
 
 typedef void (*GdaExGridFillListStoreMissingFunc) (GtkTreeStore *tstore, GtkTreeIter *iter, gpointer user_data);
 
+gboolean gdaex_grid_fill_from_sql_with_missing_func_with_sel (GdaExGrid *grid,
+															  GdaEx *gdaex,
+															  const gchar *sql,
+															  GdaExGridFillListStoreMissingFunc missing_func, gpointer user_data,
+															  GHashTable *ht_sel,
+															  GError **error);
+gboolean gdaex_grid_fill_from_datamodel_with_missing_func_with_sel (GdaExGrid *grid,
+																	GdaDataModel *dm,
+																	GdaExGridFillListStoreMissingFunc missing_func, gpointer user_data,
+																	GHashTable *ht_sel,
+																	GError **error);
+gboolean gdaex_grid_fill_from_sqlbuilder_with_missing_func_with_sel (GdaExGrid *grid,
+																	 GdaEx *gdaex,
+																	 GdaExSqlBuilder *sqlbuilder,
+																	 GdaExGridFillListStoreMissingFunc missing_func, gpointer user_data,
+																	 GHashTable *ht_sel,
+																	 GError **error);
+
 gboolean gdaex_grid_fill_from_sql_with_missing_func (GdaExGrid *grid,
                                                      GdaEx *gdaex,
                                                      const gchar *sql,

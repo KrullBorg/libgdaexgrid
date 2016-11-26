@@ -93,6 +93,7 @@ struct _GdaExGridPrivate
 		GtkTreeModel *model;
 		GtkWidget *view;
 		GtkWidget *menu;
+		GtkTreeSelection *selection;
 
 #ifdef SOLIPA_FOUND
 		Solipa *solipa;
@@ -308,35 +309,6 @@ GtkWidget
 	return GTK_WIDGET (gdaex_grid_get_view (grid));
 }
 
-gboolean
-gdaex_grid_fill_from_sql_with_missing_func (GdaExGrid *grid,
-                                            GdaEx *gdaex,
-                                            const gchar *sql,
-                                            GdaExGridFillListStoreMissingFunc missing_func, gpointer user_data,
-                                            GError **error)
-{
-	GdaDataModel *dm;
-
-	gchar *_sql;
-
-	gboolean ret;
-
-	g_return_val_if_fail (GDAEX_IS_GRID (grid), FALSE);
-	g_return_val_if_fail (IS_GDAEX (gdaex), FALSE);
-	g_return_val_if_fail (sql != NULL, FALSE);
-
-	_sql = g_strstrip (g_strdup (sql));
-
-	g_return_val_if_fail (g_strcmp0 (_sql, "") != 0, FALSE);
-
-	dm = gdaex_query (gdaex, _sql);
-	g_free (_sql);
-	ret = gdaex_grid_fill_from_datamodel_with_missing_func (grid, dm, missing_func, user_data, error);
-	g_object_unref (dm);
-
-	return ret;
-}
-
 static
 const gchar *_gettext (const gchar *str)
 {
@@ -356,15 +328,47 @@ const gchar *_gettext (const gchar *str)
 }
 
 gboolean
-gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
-                                                  GdaDataModel *dm,
-                                                  GdaExGridFillListStoreMissingFunc missing_func, gpointer user_data,
-                                                  GError **error)
+gdaex_grid_fill_from_sql_with_missing_func_with_sel (GdaExGrid *grid,
+													 GdaEx *gdaex,
+													 const gchar *sql,
+													 GdaExGridFillListStoreMissingFunc missing_func, gpointer user_data,
+													 GHashTable *ht_sel,
+													 GError **error)
+{
+	GdaDataModel *dm;
+
+	gchar *_sql;
+
+	gboolean ret;
+
+	g_return_val_if_fail (GDAEX_IS_GRID (grid), FALSE);
+	g_return_val_if_fail (IS_GDAEX (gdaex), FALSE);
+	g_return_val_if_fail (sql != NULL, FALSE);
+
+	_sql = g_strstrip (g_strdup (sql));
+
+	g_return_val_if_fail (g_strcmp0 (_sql, "") != 0, FALSE);
+
+	dm = gdaex_query (gdaex, _sql);
+	g_free (_sql);
+	ret = gdaex_grid_fill_from_datamodel_with_missing_func_with_sel (grid, dm, missing_func, user_data, ht_sel, error);
+	g_object_unref (dm);
+
+	return ret;
+}
+
+gboolean
+gdaex_grid_fill_from_datamodel_with_missing_func_with_sel (GdaExGrid *grid,
+														   GdaDataModel *dm,
+														   GdaExGridFillListStoreMissingFunc missing_func, gpointer user_data,
+														   GHashTable *ht_sel,
+														   GError **error)
 {
 	GdaExGridPrivate *priv;
 
 	GdaDataModelIter *dm_iter;
 	GtkTreeIter iter;
+	GtkTreePath *path;
 
 	const gchar *field_name;
 
@@ -409,6 +413,8 @@ gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
 	values = g_new0 (GValue, cols);
 
 	call_missing_func = FALSE;
+
+	path = NULL;
 
 	if (priv->app_textdomain != NULL)
 		{
@@ -519,29 +525,34 @@ gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
 							columns[cols_sorted] = cols_sorted;
 
 							GValue gval = {0};
-							if (gdaex_col_gtype == G_TYPE_DATE
-							    || gdaex_col_gtype == G_TYPE_DATE_TIME
-							    || gdaex_col_gtype == GDA_TYPE_TIMESTAMP)
+							switch (gdaex_col_gtype)
 								{
-									g_value_init (&gval, G_TYPE_STRING);
-									gdatetime = gdaex_data_model_iter_get_field_value_gdatetime_at (dm_iter, field_name);
-									g_value_set_string (&gval, gdatetime != NULL ? g_date_time_format (gdatetime, gdaex_col_gtype == G_TYPE_DATE ? "%Y%m%d" : "%Y%m%d%H%M%S") : "");
-									g_date_time_unref (gdatetime);
-								}
-							else if (gdaex_col_gtype == G_TYPE_INT)
-								{
+								case G_TYPE_INT:
 									g_value_init (&gval, G_TYPE_INT);
 									g_value_set_int (&gval, gdaex_data_model_iter_get_field_value_integer_at (dm_iter, field_name));
-								}
-							else if (gdaex_col_gtype == G_TYPE_FLOAT)
-								{
+									break;
+
+								case G_TYPE_FLOAT:
 									g_value_init (&gval, G_TYPE_FLOAT);
 									g_value_set_float (&gval, gdaex_data_model_iter_get_field_value_float_at (dm_iter, field_name));
-								}
-							else if (gdaex_col_gtype == G_TYPE_DOUBLE)
-								{
+									break;
+
+								case G_TYPE_DOUBLE:
 									g_value_init (&gval, G_TYPE_DOUBLE);
 									g_value_set_double (&gval, gdaex_data_model_iter_get_field_value_double_at (dm_iter, field_name));
+									break;
+
+								default:
+									if (gdaex_col_gtype == G_TYPE_DATE
+										|| gdaex_col_gtype == G_TYPE_DATE_TIME
+										|| gdaex_col_gtype == GDA_TYPE_TIMESTAMP)
+										{
+											g_value_init (&gval, G_TYPE_STRING);
+											gdatetime = gdaex_data_model_iter_get_field_value_gdatetime_at (dm_iter, field_name);
+											g_value_set_string (&gval, gdatetime != NULL ? g_date_time_format (gdatetime, gdaex_col_gtype == G_TYPE_DATE ? "%Y%m%d" : "%Y%m%d%H%M%S") : "");
+											g_date_time_unref (gdatetime);
+										}
+									break;
 								}
 							values[cols_sorted] = gval;
 							cols_sorted++;
@@ -554,6 +565,92 @@ gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
 				{
 					missing_func (GTK_TREE_STORE (priv->model), &iter, user_data);
 				}
+
+			if (ht_sel != NULL)
+				{
+					GHashTableIter ht_iter;
+					gpointer key;
+					gpointer value;
+					gboolean to_select;
+
+					to_select = TRUE;
+					g_hash_table_iter_init (&ht_iter, ht_sel);
+					while (g_hash_table_iter_next (&ht_iter, &key, &value))
+						{
+							guint col;
+							GValue *gval;
+							GValue gval_col = {0};
+
+							col = strtol ((gchar *)key, NULL, 10);
+
+							gval = (GValue *)value;
+
+							gtk_tree_model_get_value (GTK_TREE_MODEL (priv->model), &iter,
+													  col,
+													  &gval_col);
+
+							switch (G_VALUE_TYPE (gval))
+								{
+								case G_TYPE_STRING:
+									if (g_strcmp0 (g_value_get_string (gval), g_value_get_string (&gval_col)) != 0)
+										{
+											to_select = FALSE;
+										}
+									break;
+
+								case G_TYPE_INT:
+									if (g_value_get_int (gval) != g_value_get_int (&gval_col))
+										{
+											to_select = FALSE;
+										}
+									break;
+
+								case G_TYPE_FLOAT:
+									if (g_value_get_float (gval) != g_value_get_float (&gval_col))
+										{
+											to_select = FALSE;
+										}
+									break;
+
+								case G_TYPE_DOUBLE:
+									if (g_value_get_double (gval) != g_value_get_double (&gval_col))
+										{
+											to_select = FALSE;
+										}
+									break;
+
+								case G_TYPE_BOOLEAN:
+									if (g_value_get_boolean (gval) != g_value_get_boolean (&gval_col))
+										{
+											to_select = FALSE;
+										}
+									break;
+
+								default:
+									to_select = FALSE;
+									break;
+								}
+
+							g_value_unset (&gval_col);
+
+							if (!to_select)
+								{
+									break;
+								}
+						}
+
+					if (to_select)
+						{
+							gtk_tree_selection_select_iter (priv->selection, &iter);
+							path = gtk_tree_model_get_path (GTK_TREE_MODEL (priv->model), &iter);
+						}
+				}
+		}
+
+	if (path != NULL)
+		{
+			gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (priv->view), path, NULL, TRUE, 0.5, 0.0);
+			gtk_tree_path_free (path);
 		}
 
 	if (priv->app_textdomain != NULL)
@@ -562,6 +659,67 @@ gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
 		}
 
 	return TRUE;
+}
+
+gboolean
+gdaex_grid_fill_from_sqlbuilder_with_missing_func_with_sel (GdaExGrid *grid,
+															GdaEx *gdaex,
+															GdaExSqlBuilder *builder,
+															GdaExGridFillListStoreMissingFunc missing_func, gpointer user_data,
+															GHashTable *ht_sel,
+															GError **error)
+{
+	GdaDataModel *dm;
+
+	gboolean ret;
+
+	g_return_val_if_fail (GDAEX_IS_GRID (grid), FALSE);
+	g_return_val_if_fail (IS_GDAEX (gdaex), FALSE);
+	g_return_val_if_fail (GDAEX_IS_SQLBUILDER (builder), FALSE);
+
+	dm = gdaex_sql_builder_query (builder, gdaex, NULL);
+	ret = gdaex_grid_fill_from_datamodel_with_missing_func_with_sel (grid, dm, missing_func, user_data, ht_sel, error);
+	g_object_unref (dm);
+
+	return ret;
+}
+
+gboolean
+gdaex_grid_fill_from_sql_with_missing_func (GdaExGrid *grid,
+                                            GdaEx *gdaex,
+                                            const gchar *sql,
+                                            GdaExGridFillListStoreMissingFunc missing_func, gpointer user_data,
+                                            GError **error)
+{
+	GdaDataModel *dm;
+
+	gchar *_sql;
+
+	gboolean ret;
+
+	g_return_val_if_fail (GDAEX_IS_GRID (grid), FALSE);
+	g_return_val_if_fail (IS_GDAEX (gdaex), FALSE);
+	g_return_val_if_fail (sql != NULL, FALSE);
+
+	_sql = g_strstrip (g_strdup (sql));
+
+	g_return_val_if_fail (g_strcmp0 (_sql, "") != 0, FALSE);
+
+	dm = gdaex_query (gdaex, _sql);
+	g_free (_sql);
+	ret = gdaex_grid_fill_from_datamodel_with_missing_func (grid, dm, missing_func, user_data, error);
+	g_object_unref (dm);
+
+	return ret;
+}
+
+gboolean
+gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
+                                                  GdaDataModel *dm,
+                                                  GdaExGridFillListStoreMissingFunc missing_func, gpointer user_data,
+                                                  GError **error)
+{
+	return gdaex_grid_fill_from_datamodel_with_missing_func_with_sel (grid, dm, missing_func, user_data, NULL, error);
 }
 
 gboolean
@@ -743,6 +901,7 @@ static GtkTreeView
 	view = gtk_tree_view_new_with_model (model);
 
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
+	priv->selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
 
 	if (priv->menu != NULL)
 		{
