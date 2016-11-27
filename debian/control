@@ -1,0 +1,24 @@
+Source: libgdaexgrid
+Priority: optional
+Maintainer: Andrea Zagli <azagli@libero.it>
+Build-Depends: debhelper (>= 9), intltool, pkg-config, gnome-common, gtk-doc-tools, libgdaex-dev, libreptool-dev, libsolipa-dev
+Standards-Version: 3.9.8
+Section: libs
+Homepage: http://saetta.ns0.it/
+#Vcs-Git: https://anonscm.debian.org/collab-maint/libgdaexgrid.git
+#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/libgdaexgrid.git
+
+Package: libgdaexgrid-dev
+Section: libdevel
+Architecture: any
+Depends: libgdaexgrid (= ${binary:Version}), ${misc:Depends}, libgdaex-dev, libreptool-dev, libsolipa-dev
+Description: A grid Gtk widget to bind to db - development files.
+ A grid Gtk widget to bind to db.
+ .
+ Development files.
+
+Package: libgdaexgrid
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libgdaex, libreptool, libsolipa
+Description: A grid Gtk widget to bind to db.
+ A grid Gtk widget to bind to db.

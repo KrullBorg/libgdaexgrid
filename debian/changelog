@@ -1,0 +1,10 @@
+libgdaexgrid (0.0.1-1~2.gbp770b57) UNRELEASED; urgency=medium
+
+  ** SNAPSHOT build @770b57f695663999415ce08c1b0fe7298b98f7e9 **
+
+  [ Andrea Zagli ]
+  * Initial release
+
+  [ tux ]
+
+ -- Andrea Zagli <azagli@libero.it>  Sun, 27 Nov 2016 09:50:52 +0100
