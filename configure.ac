@@ -29,7 +29,9 @@ AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
 AC_PROG_RANLIB
 
-GTK_DOC_CHECK(1.0)
+# check for gtk-doc
+GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
+
 IT_PROG_INTLTOOL
 
 dnl ******************************
@@ -97,6 +99,8 @@ AM_CONDITIONAL(PLATFORM_WIN32, [test $platform_win32 = yes])
 AC_CONFIG_FILES([
 	libgdaexgrid.pc
 	Makefile
+	docs/Makefile
+	docs/reference/Makefile
 	po/Makefile.in
 	src/Makefile
 	tests/Makefile
