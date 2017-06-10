@@ -61,3 +61,5 @@ Rules-quot
 tests/grid
 tests/grid_tree
 test-driver
+*.gir
+*.typelib
