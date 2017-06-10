@@ -1,7 +1,7 @@
-LIBS = $(GDAEX_LIBS) \
+LIBS = $(GDAEXGRID_LIBS) \
        -export-dynamic
 
-AM_CPPFLAGS = $(GDAEX_CFLAGS) \
+AM_CPPFLAGS = $(GDAEXGRID_CFLAGS) \
               -I$(top_srcdir)/src \
               -DTESTSDIR="\"@abs_builddir@\""
 
@@ -12,6 +12,14 @@ AM_CPPFLAGS += \
 
 LIBS += \
         $(SOLIPA_LIBS)
+endif
+
+if LIBREPTOOL_FOUND
+AM_CPPFLAGS += \
+               $(REPTOOL_CFLAGS)
+
+LIBS += \
+        $(REPTOOL_LIBS)
 endif
 
 noinst_PROGRAMS = \
