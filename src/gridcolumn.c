@@ -1,7 +1,7 @@
 /*
  *  gridcolumn.c
  *
- *  Copyright (C) 2010-2015 Andrea Zagli <azagli@libero.it>
+ *  Copyright (C) 2010-2017 Andrea Zagli <azagli@libero.it>
  *
  *  This file is part of libgdaexgrid.
  *
@@ -87,6 +87,19 @@ gdaex_grid_column_init (GdaExGridColumn *gdaex_grid_column)
 	priv->vcolumn = NULL;
 }
 
+/**
+ * gdaex_grid_column_new:
+ * @title:
+ * @field_name:
+ * @type:
+ * @visible:
+ * @resizable:
+ * @sortable:
+ * @reorderable:
+ * @decimals:
+ *
+ * Returns: a new #GdaExGridColumns object.
+ */
 GdaExGridColumn
 *gdaex_grid_column_new (const gchar *title,
                         const gchar *field_name,
@@ -128,6 +141,12 @@ GdaExGridColumn
 	                              type == G_TYPE_FLOAT || type == G_TYPE_DOUBLE ? 2 : 0);
 }
 
+/**
+ * gdaex_grid_columns_set_title:
+ * @column:
+ * title:
+ *
+ */
 void
 gdaex_grid_column_set_title (GdaExGridColumn *column, const gchar *title)
 {
@@ -144,6 +163,12 @@ gdaex_grid_column_set_title (GdaExGridColumn *column, const gchar *title)
 		}
 }
 
+/**
+ * gdaex_grid_column_get_title:
+ * @column:
+ *
+ * Returns: the column's title.
+ */
 const gchar
 *gdaex_grid_column_get_title (GdaExGridColumn *column)
 {
@@ -154,6 +179,12 @@ const gchar
 	return (const gchar *)g_strdup (priv->title);
 }
 
+/**
+ * gdaex_grid_column_set_field_name:
+ * @column:
+ * @field_name:
+ *
+ */
 void
 gdaex_grid_column_set_field_name (GdaExGridColumn *column, const gchar *field_name)
 {
@@ -165,6 +196,12 @@ gdaex_grid_column_set_field_name (GdaExGridColumn *column, const gchar *field_na
 	priv->field_name = g_strdup (field_name);
 }
 
+/**
+ * gdaex_grid_column_get_field_name:
+ * @column:
+ *
+ * Returns: the column's field name.
+ */
 const gchar
 *gdaex_grid_column_get_field_name (GdaExGridColumn *column)
 {
@@ -175,6 +212,12 @@ const gchar
 	return (const gchar *)g_strdup (priv->field_name);
 }
 
+/**
+ * gdaex_grid_column_set_gtype:
+ * @column:
+ * @type:
+ *
+ */
 void
 gdaex_grid_column_set_gtype (GdaExGridColumn *column, GType type)
 {
@@ -185,6 +228,12 @@ gdaex_grid_column_set_gtype (GdaExGridColumn *column, GType type)
 	priv->type = type;
 }
 
+/**
+ * gdaex_grid_column_get_type:
+ * @column:
+ *
+ * Returns: the column's GType.
+ */
 GType
 gdaex_grid_column_get_gtype (GdaExGridColumn *column)
 {
@@ -195,6 +244,12 @@ gdaex_grid_column_get_gtype (GdaExGridColumn *column)
 	return priv->type;
 }
 
+/**
+ * gdaex_grid_column_set_visible:
+ * @column:
+ * @visible:
+ *
+ */
 void
 gdaex_grid_column_set_visible (GdaExGridColumn *column, gboolean visible)
 {
@@ -210,6 +265,12 @@ gdaex_grid_column_set_visible (GdaExGridColumn *column, gboolean visible)
 		}
 }
 
+/**
+ * gdaex_grid_column_get_visible:
+ * column:
+ *
+ * Returns: if column is visible.
+ */
 gboolean
 gdaex_grid_column_get_visible (GdaExGridColumn *column)
 {
@@ -220,6 +281,12 @@ gdaex_grid_column_get_visible (GdaExGridColumn *column)
 	return priv->visible;
 }
 
+/**
+ * gdaex_grid_column_set_resizable:
+ * @column:
+ * @resizable:
+ *
+ */
 void
 gdaex_grid_column_set_resizable (GdaExGridColumn *column, gboolean resizable)
 {
@@ -235,6 +302,12 @@ gdaex_grid_column_set_resizable (GdaExGridColumn *column, gboolean resizable)
 		}
 }
 
+/**
+ * gdaex_grid_column_get_resizable:
+ * @column:
+ *
+ * Returns: if column is resizable.
+ */
 gboolean
 gdaex_grid_column_get_resizable (GdaExGridColumn *column)
 {
@@ -245,6 +318,12 @@ gdaex_grid_column_get_resizable (GdaExGridColumn *column)
 	return priv->resizable;
 }
 
+/**
+ * gdaex_grid_column_set_sortable:
+ * @column:
+ * @sortable:
+ *
+ */
 void
 gdaex_grid_column_set_sortable (GdaExGridColumn *column, gboolean sortable)
 {
@@ -260,6 +339,12 @@ gdaex_grid_column_set_sortable (GdaExGridColumn *column, gboolean sortable)
 		}
 }
 
+/**
+ * gdaex_grid_column_get_sortable:
+ * @column:
+ *
+ * Returns: if column is sortable.
+ */
 gboolean
 gdaex_grid_column_get_sortable (GdaExGridColumn *column)
 {
@@ -270,6 +355,12 @@ gdaex_grid_column_get_sortable (GdaExGridColumn *column)
 	return priv->sortable;
 }
 
+/**
+ * gdaex_grid_column_set_reorderable:
+ * @column:
+ * @reorderable:
+ *
+ */
 void
 gdaex_grid_column_set_reorderable (GdaExGridColumn *column, gboolean reorderable)
 {
@@ -285,6 +376,12 @@ gdaex_grid_column_set_reorderable (GdaExGridColumn *column, gboolean reorderable
 		}
 }
 
+/**
+ * gdaex_grid_column_get_reorderable:
+ * @column:
+ *
+ * Returns: if column is reorderable.
+ */
 gboolean
 gdaex_grid_column_get_reorderable (GdaExGridColumn *column)
 {
@@ -295,6 +392,12 @@ gdaex_grid_column_get_reorderable (GdaExGridColumn *column)
 	return priv->reorderable;
 }
 
+/**
+ * gdaex_grid_column_set_decimals:
+ * @column:
+ * @decimals:
+ *
+ */
 void
 gdaex_grid_column_set_decimals (GdaExGridColumn *column, gint decimals)
 {
@@ -305,6 +408,12 @@ gdaex_grid_column_set_decimals (GdaExGridColumn *column, gint decimals)
 	priv->decimals = decimals;
 }
 
+/**
+ * gdaex_grid_column_get_decimals:
+ * @column:
+ *
+ * Returns: the number of decimals.
+ */
 gint
 gdaex_grid_column_get_decimals (GdaExGridColumn *column)
 {
@@ -315,6 +424,12 @@ gdaex_grid_column_get_decimals (GdaExGridColumn *column)
 	return priv->decimals;
 }
 
+/**
+ * gdaex_grid_column_get_column:
+ * @column:
+ *
+ * Returns: the #GtkTreeViewColumn object associated with thes column.
+ */
 GtkTreeViewColumn
 *gdaex_grid_column_get_column (GdaExGridColumn *column)
 {
