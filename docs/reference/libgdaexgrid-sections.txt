@@ -1,5 +1,6 @@
 <SECTION>
-<FILE>grid</FILE>
+<FILE>gdaexgrid</FILE>
+<TITLE>GdaExGrid</TITLE>
 <SUBSECTION Standard>
 GDAEX_GRID
 GDAEX_GRID_CLASS
@@ -12,7 +13,8 @@ GdaExGridClass
 </SECTION>
 
 <SECTION>
-<FILE>gridcolumn</FILE>
+<FILE>gdaexgridcolumn</FILE>
+<TITLE>GdaExGridColumn</TITLE>
 <SUBSECTION Standard>
 GDAEX_GRID_COLUMN
 GDAEX_GRID_COLUMN_CLASS
@@ -23,4 +25,3 @@ GDAEX_TYPE_GRID_COLUMN
 GdaExGridColumn
 GdaExGridColumnClass
 </SECTION>
-

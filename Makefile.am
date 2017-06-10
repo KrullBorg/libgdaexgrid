@@ -1,3 +1,5 @@
+DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
+
 SUBDIRS = po src tests docs
 
 ACLOCAL_AMFLAGS = -I m4

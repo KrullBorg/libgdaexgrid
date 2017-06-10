@@ -1,7 +1,7 @@
 /*
  *  grid.c
  *
- *  Copyright (C) 2010-2016 Andrea Zagli <azagli@libero.it>
+ *  Copyright (C) 2010-2017 Andrea Zagli <azagli@libero.it>
  *
  *  This file is part of libgdaexgrid.
  *
@@ -147,6 +147,13 @@ gdaex_grid_init (GdaExGrid *gdaex_grid)
 	priv->app_textdomain = NULL;
 }
 
+/**
+ * gdaex_grid_new:
+ *
+ * Creates the #GdaExGrid object.
+ *
+ * Returns: a new #GdaExGrid object.
+ */
 GdaExGrid
 *gdaex_grid_new ()
 {
@@ -192,6 +199,13 @@ GdaExGrid
 	return gdaex_grid;
 }
 
+/**
+ * gdaex_grid_set_app_textdomain:
+ * @grid: a #GdaExGrid object.
+ * @textdomain:
+ *
+ * Sets the textdomain.
+ */
 void
 gdaex_grid_set_app_textdomain (GdaExGrid *grid, const gchar *textdomain)
 {
@@ -208,6 +222,13 @@ gdaex_grid_set_app_textdomain (GdaExGrid *grid, const gchar *textdomain)
 	priv->app_textdomain = g_strdup (textdomain);
 }
 
+/**
+ * gdaex_grid_set_title:
+ * @grid: a #GdaExGrid object.
+ * @title: the grid's title.
+ *
+ * Sets the grid's title.
+ */
 void
 gdaex_grid_set_title (GdaExGrid *grid, const gchar *title)
 {
@@ -232,6 +253,14 @@ gdaex_grid_set_title (GdaExGrid *grid, const gchar *title)
 		}
 }
 
+/**
+ * gdaex_grid_get_title:
+ * @grid: a #GdaExGrid object.
+ *
+ * Gets the grid's title.
+ *
+ * Returns: the grid's title.
+ */
 const gchar
 *gdaex_grid_get_title (GdaExGrid *grid)
 {
@@ -251,6 +280,13 @@ const gchar
 		}
 }
 
+/**
+ * gdaex_grid_add_column:
+ * @grid: a #GdaExGrid object.
+ * @column: a #GdaExGridColumn object.
+ *
+ * Adds a column to the grid.
+ */
 void
 gdaex_grid_add_column (GdaExGrid *grid, GdaExGridColumn *column)
 {
@@ -264,6 +300,13 @@ gdaex_grid_add_column (GdaExGrid *grid, GdaExGridColumn *column)
 	g_ptr_array_add (priv->columns, g_object_ref (column));
 }
 
+/**
+ * gdaex_grid_add_columns:
+ * @grid: a #GdaExGrid object.
+ * @columns: a #GSList of #GdaExGridColumn objects.
+ *
+ * Adds columns to the grid.
+ */
 void
 gdaex_grid_add_columns (GdaExGrid *grid, GSList *columns)
 {
@@ -279,6 +322,12 @@ gdaex_grid_add_columns (GdaExGrid *grid, GSList *columns)
 		}
 }
 
+/**
+ * gdaex_grid_clear:
+ * @grid: a #GdaExGrid object.
+ *
+ * Clears the grid object.
+ */
 void
 gdaex_grid_clear (GdaExGrid *grid)
 {
@@ -301,6 +350,14 @@ gdaex_grid_clear (GdaExGrid *grid)
 	priv->columns = g_ptr_array_new ();
 }
 
+/**
+ * gdaex_grid_get_widget:
+ * @grid: a #GdaExGrid object.
+ *
+ * Gets the #GtkWidget of the grid.
+ *
+ * Returns: the #GtkWidget of the grid.
+ */
 GtkWidget
 *gdaex_grid_get_widget (GdaExGrid *grid)
 {
@@ -327,6 +384,20 @@ const gchar *_gettext (const gchar *str)
 		}
 }
 
+/**
+ * gdaex_grid_fill_from_sql_with_missing_func_with_sel:
+ * @grid: a #GdaExGrid object.
+ * @gdaex: a #GdaEx object.
+ * @sql: the sql statement to use as datasource.
+ * @missing_func:
+ * @user_data:
+ * @ht_sel:
+ * @error: where return errors.
+ *
+ * Fills the grid.
+ *
+ * Returns: TRUE if success.
+ */
 gboolean
 gdaex_grid_fill_from_sql_with_missing_func_with_sel (GdaExGrid *grid,
 													 GdaEx *gdaex,
@@ -357,6 +428,19 @@ gdaex_grid_fill_from_sql_with_missing_func_with_sel (GdaExGrid *grid,
 	return ret;
 }
 
+/**
+ * gdaex_grid_fill_from_datamodel_with_missing_func_with_sel:
+ * @grid: a #GdaExGrid object.
+ * @dm: a #GdaDataModel object to use as datasource.
+ * @missing_func:
+ * @user_data:
+ * @ht_sel:
+ * @error: where return errors.
+ *
+ * Fills the grid.
+ *
+ * Returns: TRUE if success.
+ */
 gboolean
 gdaex_grid_fill_from_datamodel_with_missing_func_with_sel (GdaExGrid *grid,
 														   GdaDataModel *dm,
@@ -661,6 +745,20 @@ gdaex_grid_fill_from_datamodel_with_missing_func_with_sel (GdaExGrid *grid,
 	return TRUE;
 }
 
+/**
+ * gdaex_grid_fill_from_sqlbuilder_with_missing_func_with_sel:
+ * @grid: a #GdaExGrid object.
+ * @gdaex: a #GdaEx object.
+ * @builder:
+ * @missing_func:
+ * @user_data:
+ * @ht_sel:
+ * @error: where return errors.
+ *
+ * Fills the grid.
+ *
+ * Returns: TRUE if success.
+ */
 gboolean
 gdaex_grid_fill_from_sqlbuilder_with_missing_func_with_sel (GdaExGrid *grid,
 															GdaEx *gdaex,
@@ -684,6 +782,19 @@ gdaex_grid_fill_from_sqlbuilder_with_missing_func_with_sel (GdaExGrid *grid,
 	return ret;
 }
 
+/**
+ * gdaex_grid_fill_from_sql_with_missing_func:
+ * @grid: a #GdaExGrid object.
+ * @gdaex: a #GdaEx object.
+ * @sql: the sql statement to use as datasource.
+ * @missing_func:
+ * @user_data:
+ * @error: where return errors.
+ *
+ * Fills the grid.
+ *
+ * Returns: TRUE if success.
+ */
 gboolean
 gdaex_grid_fill_from_sql_with_missing_func (GdaExGrid *grid,
                                             GdaEx *gdaex,
@@ -713,6 +824,18 @@ gdaex_grid_fill_from_sql_with_missing_func (GdaExGrid *grid,
 	return ret;
 }
 
+/**
+ * gdaex_grid_fill_from_datamodel_with_missing_func:
+ * @grid: a #GdaExGrid object.
+ * @dm: a #GdaDataModel object to use as datasource.
+ * @missing_func:
+ * @user_data:
+ * @error: where return errors.
+ *
+ * Fills the grid.
+ *
+ * Returns: TRUE if success.
+ */
 gboolean
 gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
                                                   GdaDataModel *dm,
@@ -722,6 +845,19 @@ gdaex_grid_fill_from_datamodel_with_missing_func (GdaExGrid *grid,
 	return gdaex_grid_fill_from_datamodel_with_missing_func_with_sel (grid, dm, missing_func, user_data, NULL, error);
 }
 
+/**
+ * gdaex_grid_fill_from_sqlbuilder_with_missing_func:
+ * @grid: a #GdaExGrid object.
+ * @gdaex: a #GdaEx object.
+ * @builder: a #GdaExSqlBuilder object.
+ * @missing_func:
+ * @user_data:
+ * @error: where return errors.
+ *
+ * Fills the grid.
+ *
+ * Returns: TRUE if success.
+ */
 gboolean
 gdaex_grid_fill_from_sqlbuilder_with_missing_func (GdaExGrid *grid,
                                                    GdaEx *gdaex,
@@ -744,18 +880,50 @@ gdaex_grid_fill_from_sqlbuilder_with_missing_func (GdaExGrid *grid,
 	return ret;
 }
 
+/**
+ * gdaex_grid_fill_from_sql:
+ * @grid: a #GdaExGrid object.
+ * @gdaex: a #GdaEx object.
+ * @sql: the sql statement to use as datasource.
+ * @error: where return errors.
+ *
+ * Fills the grid.
+ *
+ * Returns: TRUE if success.
+ */
 gboolean
 gdaex_grid_fill_from_sql (GdaExGrid *grid, GdaEx *gdaex, const gchar *sql, GError **error)
 {
 	return gdaex_grid_fill_from_sql_with_missing_func (grid, gdaex, sql, NULL, NULL, error);
 }
 
+/**
+ * gdaex_grid_fill_from_datamodel:
+ * @grid: a #GdaExGrid object.
+ * @dm: a #GdaDataModel to use as datasource.
+ * @error: where return errors.
+ *
+ * Fills the grid.
+ *
+ * Returns: TRUE if success.
+ */
 gboolean
 gdaex_grid_fill_from_datamodel (GdaExGrid *grid, GdaDataModel *dm, GError **error)
 {
 	return gdaex_grid_fill_from_datamodel_with_missing_func (grid, dm, NULL, NULL, error);
 }
 
+/**
+ * gdaex_grid_fill_from_sqlbuilder:
+ * @grid: a #GdaExGrid object.
+ * @gdaex: a #GdaEx object.
+ * @builder: a #GdaExSqlBuilder object to use as datasource.
+ * @error: where return errors.
+ *
+ * Fills the grid.
+ *
+ * Returns: TRUE if success.
+ */
 gboolean
 gdaex_grid_fill_from_sqlbuilder (GdaExGrid *grid, GdaEx *gdaex, GdaExSqlBuilder *builder, GError **error)
 {
@@ -763,6 +931,13 @@ gdaex_grid_fill_from_sqlbuilder (GdaExGrid *grid, GdaEx *gdaex, GdaExSqlBuilder 
 }
 
 #ifdef SOLIPA_FOUND
+/**
+ * gdaex_grid_set_solipa:
+ * @grid: a #GdaExGrid object.
+ * @solipa: a #Solipa object.
+ *
+ * Sets the #Solipa object.
+ */
 void
 gdaex_grid_set_solipa (GdaExGrid *grid, Solipa *solipa)
 {

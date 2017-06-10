@@ -89,14 +89,14 @@ gdaex_grid_column_init (GdaExGridColumn *gdaex_grid_column)
 
 /**
  * gdaex_grid_column_new:
- * @title:
- * @field_name:
- * @type:
- * @visible:
- * @resizable:
- * @sortable:
- * @reorderable:
- * @decimals:
+ * @title: the column's title.
+ * @field_name: the column's field name.
+ * @type: the column's #Gtype.
+ * @visible: if column is visible.
+ * @resizable: is column is resizable.
+ * @sortable: if column is sortable.
+ * @reorderable: if column is reorderable.
+ * @decimals: number of decimals.
  *
  * Returns: a new #GdaExGridColumns object.
  */
@@ -126,6 +126,14 @@ GdaExGridColumn
 	return gdaex_grid_column;
 }
 
+/**
+ * gdaex_grid_column_new_defaults:
+ * @title: the column's title.
+ * @field_name: the column's field name.
+ * @type: the column's #GType.
+ *
+ * Returns: a new #GdaExGridColumns object.
+ */
 GdaExGridColumn
 *gdaex_grid_column_new_defaults (const gchar *title,
                                  const gchar *field_name,

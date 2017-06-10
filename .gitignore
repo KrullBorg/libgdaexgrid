@@ -37,6 +37,14 @@ m4/
 missing
 config.h
 config.status
+docs/reference/libgdaexgrid-undeclared.txt
+docs/reference/libgdaexgrid-undocumented.txt
+docs/reference/libgdaexgrid-unused.txt
+docs/reference/libgdaexgrid.args
+docs/reference/libgdaexgrid.hierarchy
+docs/reference/libgdaexgrid.interfaces
+docs/reference/libgdaexgrid.prerequisites
+docs/reference/libgdaexgrid.signals
 docs/reference/version.xml
 docs/reference/html/
 docs/reference/xml/

@@ -17,9 +17,9 @@
   </bookinfo>
 
   <chapter>
-    <title>[Insert title here]</title>
-        <xi:include href="xml/grid.xml"/>
-    <xi:include href="xml/gridcolumn.xml"/>
+    <title>GdaExGrid</title>
+        <xi:include href="xml/gdaexgrid.xml"/>
+    <xi:include href="xml/gdaexgridcolumn.xml"/>
 
   </chapter>
   <chapter id="object-tree">
